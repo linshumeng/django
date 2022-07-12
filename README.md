@@ -10,3 +10,7 @@ runserver
 migrate  
 createsuperuser  
 help  
+
+## 03.Django基本应用结构
+
+
