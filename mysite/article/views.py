@@ -1,8 +1,22 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse, Http404
 from .models import Article
 
 # Create your views here.
 def article_detail(request, article_id):
-    article = Article.objects.get(id=article_id)
-    return HttpResponse("<h2>文章标题: %s<\h2> <br>文章内容：%s" % (article.title, article.content))
+    try:
+        article = Article.objects.get(id=article_id)
+        context = {}
+        context["article_obj"] = article
+        return render(request, "article_detail.html", context)
+        # return render_to_response("article_detail.html", context)
+    except Article.DoesNotExist:
+        # return HttpResponse("不存在")
+        raise Http404("not exist")
+    return HttpResponse("" % (article.title, article.content))
+
+def article_list(request):
+    articles = Article.objects.all()
+    context = {}
+    context["articles"] = articles
+    return render(request, "article_list.html", context)
